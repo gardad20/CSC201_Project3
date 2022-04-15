@@ -24,7 +24,7 @@ public class DNAdbase {
             parse.parse();
         }
         else {
-            System.out.println("Please input a correctly formatted command:");
+            System.out.println("Please input a correctly formatted command: ");
             System.out.println("java DNAdbase <command-file> <hash-table-size> <memory-file>");
         }
     }

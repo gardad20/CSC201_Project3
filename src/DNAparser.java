@@ -45,6 +45,8 @@ public class DNAparser {
         // parses the info in the commandFile
         // calls insert, search, etc. in MemoryManager (which will automatically call the same function in the hash)
 
+        boolean doneParsing = false;  //Why is this needed? why should this return a boolean?
+
         Scanner scnr = new Scanner(new BufferedReader(new FileReader(commandFile))); //opens scanner to read the whole input file from the command line
         String line = "";
 
@@ -75,17 +77,15 @@ public class DNAparser {
             else { //this would happen when the line is null and doesn't have any commands
                 continue;
             }
+
+//            System.out.println("command: "+ command);
+
         }
 
 
 
-
-
-
-
-
-
-
+        doneParsing = true;
+        return doneParsing;
 
 
     }

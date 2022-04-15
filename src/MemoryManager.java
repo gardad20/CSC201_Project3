@@ -1,10 +1,12 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.LinkedList;
 
 public class MemoryManager {
     private RandomAccessFile memoryFile;
     private Node head;
     private HashFunction hashTable;
+    private LinkedList<Node> freeList;
 
 
    /**
@@ -18,6 +20,8 @@ public class MemoryManager {
         memoryFile.setLength(0);
         this.head = null;
         this.hashTable = new HashFunction(hashSize);
+        this.freeList = new LinkedList<>();
+        freeList.add(head);
     }
 
 
@@ -142,7 +146,7 @@ public class MemoryManager {
         hashTable.insert(id, hashObjectNew); // insert to the hash table
         return hashObjectNew;
     }
-
+    //still need to add freeList capability to Insert method
 
     /**
      * 
@@ -447,17 +451,17 @@ public class MemoryManager {
      * @param node to add to free block list
      */
     private void addToFree(Node node) {
-        if (head == null) {
+        if (head == null) {  //there are no slots filled
             head = node;
             return;
         }
-        if (head.getOffset() > node.getOffset()) {
-            if (node.getLength() + node.getOffset() == head.getOffset()) {
+        if (head.getOffset() > node.getOffset()) { //if HEAD is in a greater slot than NODE
+            if (node.getLength() + node.getOffset() == head.getOffset()) { //if there is no space btwn end of node and beg of head
                 head.setOffset(node.getOffset());
                 head.setLength(head.getLength() + node.getLength());
                 return;
             }
-            Node temp = head;
+            Node temp = head; //else, switch the positions of head&node
             node.setNext(temp);
             head = node;
             return;
