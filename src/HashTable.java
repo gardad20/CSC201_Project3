@@ -1,3 +1,5 @@
+import java.util.Hashtable;
+
 /**
  * 
  * @author 
@@ -7,11 +9,12 @@
  */
 public interface HashTable<T extends Comparable<T>, K> {
 
-   // need method declarations for insert, remove, etc.
+    //T is String, K is hashObject
 
-
-
-
+    public void insert(T,K);
+    public void remove(T, int);
+    public K search(T, int);
+    public K[] print();
 
 
 

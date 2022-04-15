@@ -1,6 +1,22 @@
+import java.util.HashMap;
+import java.util.Hashtable;
+
 public class HashFunction implements HashTable<String, HashObject> {
     
 
+    public void insert(String, HashObject){
+
+    }
+    public void remove(String, int){
+
+    }
+    public HashObject search(String, int){
+
+    }
+
+    public HashObject[] print(){
+
+    }
 
     /**
      * 
