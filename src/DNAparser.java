@@ -57,7 +57,6 @@ public class DNAparser {
                     String seqID = command[1];
                     int seqLen = Integer.parseInt(command[2]);
                     String seq = scnr.nextLine().trim().replaceAll("\\s", "");
-
                     memory.insert(seqID, seq, seqLen);
                 } else if (command[0].equals("remove")) {
                     String seqID = command[1];
