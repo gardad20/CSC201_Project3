@@ -50,21 +50,22 @@ public class DNAparser {
                 line = scnr.nextLine().trim().replaceAll("\\s", ""); //removes end (and multiple) whitespaces from line
                 Scanner linescnr = new Scanner(new BufferedReader(new FileReader(line)));  //scanner to read each line of scnr's input
 
-                String command = linescnr.next().toLowerCase(); //gets the command (either insert, remove, search, print)
+                //String command = linescnr.next().toLowerCase(); //gets the command (either insert, remove, search, print)
+                String[] command = line.split(" "); //splits the line by spaces
 
-                if (command.equals("insert")) {
-                    String seqID = linescnr.next();
-                    int seqLen = linescnr.nextInt();
+                if (command[0].equals("insert")) {
+                    String seqID = command[1];
+                    int seqLen = Integer.parseInt(command[2]);
                     String seq = scnr.nextLine().trim().replaceAll("\\s", "");
 
                     memory.insert(seqID, seq, seqLen);
-                } else if (command.equals("remove")) {
-                    String seqID = linescnr.next();
+                } else if (command[0].equals("remove")) {
+                    String seqID = command[1];
                     memory.remove(seqID);
-                } else if (command.equals("search")) {
-                    String seqID = linescnr.next();
+                } else if (command[0].equals("search")) {
+                    String seqID = command[1];
                     memory.search(seqID);
-                } else if (command.equals("print")) {
+                } else if (command[0].equals("print")) {
                     memory.print();
                 } else { //this would happen when the line is null and doesn't have any commands
                     continue;
