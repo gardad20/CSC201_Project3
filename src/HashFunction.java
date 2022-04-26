@@ -51,15 +51,18 @@ public class HashFunction implements HashTable<String, HashObject> {
         }
     }
 
-    public void remove(String id){
-        for(int i=0; i<table.length; i++){
+    public void remove(String id, Integer amountToSkip){
+        int firstSlot = (int)(sfold(id, amountToSkip)); //find where the id hashes to
+
+        for(int i=firstSlot; i<table.length; i++){
             if(table[i].getKey().equals(id)){
                 table[i] = null;
                 hashsize--;
             }
         }
     }
-    public HashObject search(String id, int counter){
+
+    public HashObject search(String id, Integer counter){
         int firstSlot = (int)(sfold(id, counter)); //find where the id hashes to
 
         for (int i = firstSlot; i < table.length; i++){ //starts at the hash slot, then loops to the end of the array to find the hashObject
