@@ -30,7 +30,6 @@ public class HashFunction implements HashTable<String, HashObject> {
     }
 
     private Entry<String, HashObject>[] table;
-    private int size;
     private int hashsize;
 
     public HashFunction(int hashsize){
@@ -39,45 +38,77 @@ public class HashFunction implements HashTable<String, HashObject> {
     }
 
     public void insert(String key, HashObject value) {
+        // David looked at this whole method and OKAYed it
+        int index = (int)sfold(key, table.length);
+        int spot = index;
         for (int i = 0; i < table.length; i++) {
-            int index = (int)sfold(key, i);
-            if (table[index] == null) {
-                table[index] = new Entry(key, value);
-                size++;
-            } else if (key.equals(table[index].key)) {
-                HashObject ret = table[index].value;
-                table[index].value = value;
+            if (table[spot] == null || table[spot].getValue().getTombstone()) {
+                table[spot] = new Entry(key, value);
+                break;
             }
+            else if ((spot + 1) % 32 == 0){
+                spot = 0;
+            }
+            else{
+                spot++;
+            }
+
         }
     }
 
-    public void remove(String id, Integer amountToSkip){
-        int firstSlot = (int)(sfold(id, amountToSkip)); //find where the id hashes to
+    public HashObject remove(String id, Integer amountToSkip){
+        // David looked at this whole method and OKAYed it
+        int firstSlot = (int)(sfold(id, table.length)); //find where the id hashes to
+        int spot = firstSlot;
+        int count = amountToSkip;
 
         for(int i=firstSlot; i<table.length; i++){
-            if(table[i].getKey().equals(id)){
-                table[i] = null;
-                hashsize--;
+            HashObject hashObj = table[spot].getValue();
+            if(table[spot].getKey().equals(id)){
+                table[spot].getValue().setTombstone(true);
+            }
+            else if(((spot + 1) % 32 == 0)){ // will loop back to the beginning of the bucket
+                spot = 0;
+            }
+            else {
+                spot ++;
+            }
+            if (hashObj == null){ return null;}
+            if (hashObj.getTombstone()) { continue;}
+            if (count == 0){
+                if (hashObj == null) { return null;}
+                hashObj.setTombstone(true);
+                return hashObj;
             }
         }
+        return null;
     }
 
-    public HashObject search(String id, Integer counter){
-        int firstSlot = (int)(sfold(id, counter)); //find where the id hashes to
+    public HashObject search(String id, Integer amountToSkip){
+        int firstSlot = (int)(sfold(id, table.length)); //find where the id hashes to
+        int spot = firstSlot;
 
         for (int i = firstSlot; i < table.length; i++){ //starts at the hash slot, then loops to the end of the array to find the hashObject
-            if (table[i].key.equals(id)){
-                return table[i].value;  // a hashObject with that id WAS found
+            if (table[spot].key.equals(id) || table[spot].getValue().getTombstone()) { // a hashObject with that id WAS found
+                return table[spot].value;
             }
+            else if ((spot + 1) % 32 == 0){ // will loop back to the beginning of the bucket
+                spot = 0;
+            }
+            else {
+                spot ++;
+            }
+
         }
         return null; // else: a hashObject with that id was NOT found
     }
 
     public HashObject[] print(){
+        //converts the table to a HashObject array to be able to print
         HashObject[] printArr = new HashObject[hashsize];
         int counter = 0;
         for(Entry temp: table){
-            if(temp != null){
+            if(temp!= null || ! temp.getValue().getTombstone() ){ //is there is something in the slot, then print it out
                 printArr[counter] = (HashObject) temp.getValue();
                 counter++;
             }

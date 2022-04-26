@@ -13,7 +13,7 @@ public interface HashTable<T extends Comparable<T>, K> {
 
     //public void sfold(T t, int num);
     public void insert(T t,K k);
-    public void remove(T t, Integer amountToSkip);
+    public HashObject remove(T t, Integer amountToSkip);
     public K search(T t, Integer amountToSkip);
     public K[] print();
 }

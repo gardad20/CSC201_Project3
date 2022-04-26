@@ -6,7 +6,6 @@ public class MemoryManager {
     private RandomAccessFile memoryFile;
     private Node head;
     private HashFunction hashTable;
-    private LinkedList<Node> freeList;
 
 
    /**
@@ -15,14 +14,12 @@ public class MemoryManager {
     * @param hashSize size of hash
     * @throws IOException can throw
     */
-    public MemoryManager(String fileName, int hashSize) throws IOException {
-        this.memoryFile = new RandomAccessFile(fileName, "rw");
-        memoryFile.setLength(0);
-        this.head = null;
-        this.hashTable = new HashFunction(hashSize);
-        this.freeList = new LinkedList<>();
-        freeList.add(head);
-    }
+   public MemoryManager(String fileName, int hashSize) throws IOException {
+       this.memoryFile = new RandomAccessFile(fileName, "rw");
+       memoryFile.setLength(0);
+       this.head = null;
+       this.hashTable = new HashFunction(hashSize);
+   }
 
 
     /**
@@ -146,7 +143,6 @@ public class MemoryManager {
         hashTable.insert(id, hashObjectNew); // insert to the hash table
         return hashObjectNew;
     }
-    //still need to add freeList capability to Insert method
 
     /**
      * 
@@ -251,7 +247,7 @@ public class MemoryManager {
             memoryFile.setLength(memoryFile.length() - getLast().getLength());
             setLast();
         }
-        hashTable.remove(id, hash.getSkip()); // check
+        hashTable.remove(id, hash.getSkip());
 
         //Prints out the sequence removed from remove method call
         if(!removed.isEmpty()){
