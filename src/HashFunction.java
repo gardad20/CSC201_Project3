@@ -31,37 +31,55 @@ public class HashFunction implements HashTable<String, HashObject> {
 
     private Entry<String, HashObject>[] table;
     private int size;
+    private int hashsize;
 
     public HashFunction(int hashsize){
         table = new Entry[hashsize];
+        this.hashsize = hashsize;
     }
 
     public void insert(String key, HashObject value) {
         for (int i = 0; i < table.length; i++) {
-
-            long index = sfold(key, i);
+            int index = (int)sfold(key, i);
             if (table[index] == null) {
                 table[index] = new Entry(key, value);
                 size++;
-                return null;
             } else if (key.equals(table[index].key)) {
                 HashObject ret = table[index].value;
                 table[index].value = value;
-                return ret;
             }
-
         }
     }
 
-    public void remove(String, int){
-
+    public void remove(String id){
+        for(int i=0; i<table.length; i++){
+            if(table[i].getKey().equals(id)){
+                table[i] = null;
+                hashsize--;
+            }
+        }
     }
-    public HashObject search(String, int){
+    public HashObject search(String id, int counter){
+        int firstSlot = (int)(sfold(id, counter)); //find where the id hashes to
 
+        for (int i = firstSlot; i < table.length; i++){ //starts at the hash slot, then loops to the end of the array to find the hashObject
+            if (table[i].key.equals(id)){
+                return table[i].value;  // a hashObject with that id WAS found
+            }
+        }
+        return null; // else: a hashObject with that id was NOT found
     }
 
     public HashObject[] print(){
-
+        HashObject[] printArr = new HashObject[hashsize];
+        int counter = 0;
+        for(Entry temp: table){
+            if(temp != null){
+                printArr[counter] = (HashObject) temp.getValue();
+                counter++;
+            }
+        }
+        return printArr;
     }
 
     /**

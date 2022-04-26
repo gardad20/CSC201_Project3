@@ -11,10 +11,9 @@ public interface HashTable<T extends Comparable<T>, K> {
 
     //T is String, K is hashObject
 
-    public void sfold();
-    public void insert(T,K);
-    public void remove(T, int);
-    public K search(T, int);
+    public void sfold(T t, int num);
+    public void insert(T t,K k);
+    public void remove(T t, int num);
+    public K search(T t, int num);
     public K[] print();
-
 }
