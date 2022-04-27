@@ -31,6 +31,7 @@ public class HashFunction implements HashTable<String, HashObject> {
 
     private Entry<String, HashObject>[] table;
     private int hashsize;
+    private int size;
 
     public HashFunction(int hashsize){
         table = new Entry[hashsize];
@@ -46,15 +47,9 @@ public class HashFunction implements HashTable<String, HashObject> {
                 table[spot] = new Entry(key, value);
                 break;
             }
-            else if ((spot + 1) % 32 == 0){
-                spot = 0;
-            }
-            else{
-                spot++;
-            }
-
         }
     }
+
 
     public HashObject remove(String id, Integer amountToSkip){
         // David looked at this whole method and OKAYed it
@@ -95,23 +90,22 @@ public class HashFunction implements HashTable<String, HashObject> {
             else if ((spot + 1) % 32 == 0){ // will loop back to the beginning of the bucket
                 spot = 0;
             }
-            else {
-                spot ++;
-            }
-
         }
         return null; // else: a hashObject with that id was NOT found
     }
 
     public HashObject[] print(){
-        //converts the table to a HashObject array to be able to print
         HashObject[] printArr = new HashObject[hashsize];
         int counter = 0;
-        for(Entry temp: table){
-            if(temp!= null || ! temp.getValue().getTombstone() ){ //is there is something in the slot, then print it out
-                printArr[counter] = (HashObject) temp.getValue();
-                counter++;
+        for(int i=0; i<table.length; i++){
+             //is there is something in the slot, then print it out
+            if (table[i] == null || table[i].getValue().getTombstone()) {
+                System.out.println("HERE1");
+                continue;
             }
+                System.out.println("HERE2");
+                printArr[counter] = table[i].getValue();
+                counter++;
         }
         return printArr;
     }

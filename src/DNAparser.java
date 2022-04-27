@@ -48,7 +48,7 @@ public class DNAparser {
 
             while (scnr.hasNextLine()) {
                 line = scnr.nextLine().trim().replaceAll("\\s", ""); //removes end (and multiple) whitespaces from line
-                Scanner linescnr = new Scanner(new BufferedReader(new FileReader(line)));  //scanner to read each line of scnr's input
+//                Scanner linescnr = new Scanner(new BufferedReader(new FileReader(line)));  //scanner to read each line of scnr's input
 
                 //String command = linescnr.next().toLowerCase(); //gets the command (either insert, remove, search, print)
                 String[] command = line.split(" "); //splits the line by spaces
