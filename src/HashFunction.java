@@ -29,85 +29,104 @@ public class HashFunction implements HashTable<String, HashObject> {
         }
     }
 
-    private Entry<String, HashObject>[] table;
+    private HashObject[] table;
     private int hashsize;
     private int size;
 
     public HashFunction(int hashsize){
-        table = new Entry[hashsize];
+        table = new HashObject[hashsize];
         this.hashsize = hashsize;
     }
 
     public void insert(String key, HashObject value) {
         // David looked at this whole method and OKAYed it
         int index = (int)sfold(key, table.length);
+        int block = index / 32;
+        int reset = block * 32;
         int spot = index;
-        for (int i = 0; i < table.length; i++) {
-            if (table[spot] == null || table[spot].getValue().getTombstone()) {
-                table[spot] = new Entry(key, value);
+        for (int i = 0; i < 32; i++) {
+            if (table[spot] == null || table[spot].getTombstone()) {
+                table[spot] = value;
                 break;
             }
+            else if ((spot + 1)% 32 == 0)
+                spot = reset;
+            else
+                spot++;
         }
     }
 
 
     public HashObject remove(String id, Integer amountToSkip){
         // David looked at this whole method and OKAYed it
-        int firstSlot = (int)(sfold(id, table.length)); //find where the id hashes to
-        int spot = firstSlot;
+        int index = (int)(sfold(id, table.length)); //find where the id hashes to
         int count = amountToSkip;
-
-        for(int i=firstSlot; i<table.length; i++){
-            HashObject hashObj = table[spot].getValue();
-            if(table[spot].getKey().equals(id)){
-                table[spot].getValue().setTombstone(true);
-            }
-            else if(((spot + 1) % 32 == 0)){ // will loop back to the beginning of the bucket
-                spot = 0;
-            }
-            else {
-                spot ++;
-            }
-            if (hashObj == null){ return null;}
-            if (hashObj.getTombstone()) { continue;}
-            if (count == 0){
-                if (hashObj == null) { return null;}
-                hashObj.setTombstone(true);
-                return hashObj;
-            }
-        }
+        int block = index / 32;
+        int reset = block * 32;
+        int spot = index;
+        int current = (spot + amountToSkip) % 32;
+        current = current + reset;
+        HashObject hashObj = table[spot];
+        hashObj.setTombstone(true);
+//        for(int i=firstSlot; i<table.length; i++){
+//            HashObject hashObj = table[spot];
+//            if(table[spot].getKey().equals(id)){
+//                table[spot].getValue().setTombstone(true);
+//            }
+//            else if(((spot + 1) % 32 == 0)){ // will loop back to the beginning of the bucket
+//                spot = 0;
+//            }
+//            else {
+//                spot ++;
+//            }
+//            if (hashObj == null){ return null;}
+//            if (hashObj.getTombstone()) { continue;}
+//            if (count == 0){
+//                if (hashObj == null) { return null;}
+//                hashObj.setTombstone(true);
+//                return hashObj;
+//            }
+//        }
         return null;
     }
 
     public HashObject search(String id, Integer amountToSkip){
-        int firstSlot = (int)(sfold(id, table.length)); //find where the id hashes to
-        int spot = firstSlot;
-
-        for (int i = firstSlot; i < table.length; i++){ //starts at the hash slot, then loops to the end of the array to find the hashObject
-            if (table[spot].key.equals(id) || table[spot].getValue().getTombstone()) { // a hashObject with that id WAS found
-                return table[spot].value;
-            }
-            else if ((spot + 1) % 32 == 0){ // will loop back to the beginning of the bucket
-                spot = 0;
-            }
-        }
-        return null; // else: a hashObject with that id was NOT found
+        int index = (int)(sfold(id, table.length)); //find where the id hashes to
+        int count = amountToSkip;
+        int block = index / 32;
+        int reset = block * 32;
+        int spot = index;
+        int current = (spot + amountToSkip) % 32;
+        current = current + reset;
+        HashObject hashObj = table[spot];
+        return hashObj;
+//        int firstSlot = (int)(sfold(id, table.length)); //find where the id hashes to
+//        int spot = firstSlot;
+//
+//        for (int i = firstSlot; i < table.length; i++){ //starts at the hash slot, then loops to the end of the array to find the hashObject
+//            if (table[spot].key.equals(id) || table[spot].getValue().getTombstone()) { // a hashObject with that id WAS found
+//                return table[spot].value;
+//            }
+//            else if ((spot + 1) % 32 == 0){ // will loop back to the beginning of the bucket
+//                spot = 0;
+//            }
+//        }
+//        return null; // else: a hashObject with that id was NOT found
     }
 
     public HashObject[] print(){
-        HashObject[] printArr = new HashObject[hashsize];
-        int counter = 0;
-        for(int i=0; i<table.length; i++){
-             //is there is something in the slot, then print it out
-            if (table[i] == null || table[i].getValue().getTombstone()) {
-                System.out.println("HERE1");
-                continue;
-            }
-                System.out.println("HERE2");
-                printArr[counter] = table[i].getValue();
-                counter++;
-        }
-        return printArr;
+        return table;
+//        HashObject[] printArr = new HashObject[hashsize];
+//        int counter = 0;
+//        for(int i=0; i<table.length; i++){
+//             //is there is something in the slot, then print it out
+//            if (table[i] == null || table[i].getValue().getTombstone()) {
+//                continue;
+//            }
+//                printArr[counter] = table[i].getValue();
+//                counter++;
+//        }
+//        return printArr;
     }
 
     /**
