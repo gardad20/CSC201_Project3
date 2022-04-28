@@ -251,7 +251,7 @@ public class MemoryManager {
 
         //Prints out the sequence removed from remove method call
         if(!removed.isEmpty()){
-            System.out.println("Sequence removed: " + removed);
+            System.out.println("Sequence removed " + id + ": \n" +removed);
             //sequence id was not found or removed
         } else{
             System.out.println("The sequence id entered does not match any of the entries in the hash table.");

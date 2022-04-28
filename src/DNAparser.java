@@ -51,7 +51,6 @@ public class DNAparser {
 
                 if (command[0].equals("insert")) {
                     String seqID = command[1];
-                    System.out.println(seqID);
                     int seqLen = Integer.parseInt(command[2]);
                     String seq = scnr.nextLine();//.trim().replaceAll("\\s", "")
                     HashObject hashed = memory.insert(seqID, seq, seqLen);
@@ -72,7 +71,7 @@ public class DNAparser {
                     memory.remove(seqID);
                 } else if (command[0].equals("search")) {
                     String seqID = command[1];
-                    System.out.println(memory.search(seqID));
+                    System.out.println("Sequence found: " + memory.search(seqID));
                 } else if (command[0].equals("print")) {
                     memory.print();
                 } else { //this would happen when the line is null and doesn't have any commands
