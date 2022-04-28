@@ -49,10 +49,11 @@ public class DNAparser {
                 String line = scnr.nextLine().trim(); //removes end (and multiple) whitespaces from line
                 String[] command = line.split("\\s+"); //splits the line by spaces
 
+                // finds what the command is, and calls the corresponding methods in MemoryManager
                 if (command[0].equals("insert")) {
                     String seqID = command[1];
                     int seqLen = Integer.parseInt(command[2]);
-                    String seq = scnr.nextLine();//.trim().replaceAll("\\s", "")
+                    String seq = scnr.nextLine();
                     HashObject hashed = memory.insert(seqID, seq, seqLen);
                     if (hashed == null) {
                         HashObject searched = memory.searchHash(command[1]);
@@ -65,7 +66,6 @@ public class DNAparser {
                                     command[1] + " exists");
                         }
                     }
-
                 } else if (command[0].equals("remove")) {
                     String seqID = command[1];
                     memory.remove(seqID);

@@ -6,13 +6,15 @@ public class HashFunction implements HashTable<String, HashObject> {
     private HashObject[] table;
     private int hashsize;
 
+    // class constructor to create a hashtable of the specified size
     public HashFunction(int hashsize){
         table = new HashObject[hashsize];
         this.hashsize = hashsize;
     }
 
+    // inserts the specified key (& corresponding value) into the hashtable
     public Integer insert(String key, HashObject value) {
-        int index = (int)sfold(key, table.length);
+        int index = (int)sfold(key, table.length); //find where the id hashes to
         int block = index / 32;
         int reset = block * 32;
         int spot = index;
@@ -22,6 +24,7 @@ public class HashFunction implements HashTable<String, HashObject> {
                 break;
             }
             else if ((spot + 1)% 32 == 0) {
+                //will loop to the top of the bucket to continue searching for a place to insert
                 spot = reset;
             }else {
                 spot++;
@@ -31,26 +34,24 @@ public class HashFunction implements HashTable<String, HashObject> {
     }
 
 
+    // this method removes the sequence associated with the sequenceID from the hashtable
     public HashObject remove(String id, Integer amountToSkip){
         int index = (int)(sfold(id, table.length)); //find where the id hashes to
-        int count = amountToSkip;
         int block = index / 32;
         int reset = block * 32;
-        int spot = index;
-        int current = (spot + amountToSkip) % 32;
+        int current = (index + amountToSkip) % 32;
         current = current + reset;
-        HashObject hashObj = table[current];
+        HashObject hashObj = table[current]; //inserting the id into the correct spot
         hashObj.setTombstone(true);
         return null;
     }
 
+    // finds and returns the sequence in hashtable corresponding to the sequenceID if it exists
     public HashObject search(String id, Integer amountToSkip){
         int index = (int)(sfold(id, table.length)); //find where the id hashes to
-        int count = amountToSkip;
         int block = index / 32;
         int reset = block * 32;
-        int spot = index;
-        int current = (spot + amountToSkip) % 32;
+        int current = (index + amountToSkip) % 32;
         current = current + reset;
         HashObject hashObj = table[current];
         if(hashObj != null && hashObj.getTombstone()){
@@ -59,6 +60,7 @@ public class HashFunction implements HashTable<String, HashObject> {
         return hashObj;
     }
 
+    // returns an array of hashObjects in the hashtable
     public HashObject[] print(){
         return table;
     }
