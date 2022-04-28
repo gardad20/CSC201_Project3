@@ -71,7 +71,11 @@ public class DNAparser {
                     memory.remove(seqID);
                 } else if (command[0].equals("search")) {
                     String seqID = command[1];
-                    System.out.println("Sequence found: " + memory.search(seqID));
+                    if(memory.search(seqID) == null){
+                        System.out.println("SequenceID " + seqID + " not found");
+                    } else {
+                        System.out.println("Sequence found: " + memory.search(seqID));
+                    }
                 } else if (command[0].equals("print")) {
                     memory.print();
                 } else { //this would happen when the line is null and doesn't have any commands

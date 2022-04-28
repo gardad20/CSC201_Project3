@@ -53,6 +53,9 @@ public class HashFunction implements HashTable<String, HashObject> {
         int current = (spot + amountToSkip) % 32;
         current = current + reset;
         HashObject hashObj = table[current];
+        if(hashObj != null && hashObj.getTombstone()){
+            return null;
+        }
         return hashObj;
     }
 
