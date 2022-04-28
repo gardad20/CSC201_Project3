@@ -39,7 +39,7 @@ public class HashFunction implements HashTable<String, HashObject> {
         int spot = index;
         int current = (spot + amountToSkip) % 32;
         current = current + reset;
-        HashObject hashObj = table[spot];
+        HashObject hashObj = table[current];
         hashObj.setTombstone(true);
         return null;
     }
