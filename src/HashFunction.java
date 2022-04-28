@@ -11,7 +11,7 @@ public class HashFunction implements HashTable<String, HashObject> {
         this.hashsize = hashsize;
     }
 
-    public void insert(String key, HashObject value) {
+    public Integer insert(String key, HashObject value) {
         int index = (int)sfold(key, table.length);
         int block = index / 32;
         int reset = block * 32;
@@ -21,11 +21,13 @@ public class HashFunction implements HashTable<String, HashObject> {
                 table[spot] = value;
                 break;
             }
-            else if ((spot + 1)% 32 == 0)
+            else if ((spot + 1)% 32 == 0) {
                 spot = reset;
-            else
+            }else {
                 spot++;
+            }
         }
+        return -1;
     }
 
 
@@ -50,7 +52,7 @@ public class HashFunction implements HashTable<String, HashObject> {
         int spot = index;
         int current = (spot + amountToSkip) % 32;
         current = current + reset;
-        HashObject hashObj = table[spot];
+        HashObject hashObj = table[current];
         return hashObj;
     }
 

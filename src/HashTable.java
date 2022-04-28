@@ -12,7 +12,7 @@ public interface HashTable<T extends Comparable<T>, K> {
     //T is String, K is hashObject
 
     //public void sfold(T t, int num);
-    public void insert(T t,K k);
+    public Integer insert(T t,K k);
     public HashObject remove(T t, Integer amountToSkip);
     public K search(T t, Integer amountToSkip);
     public K[] print();
